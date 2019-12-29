@@ -24,7 +24,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-8">
+                <div class="col-4">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <label class="input-group-text" for="inputGroupSelect01">Type</label>
