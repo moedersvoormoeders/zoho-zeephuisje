@@ -466,7 +466,7 @@ export default {
           ? pakket.Opemerking
           : "";
 
-        if (pakket.id > maxID) {
+        if (pakket.id1 > maxID) {
           maxID = pakket.id1;
         }
         rowID++;
@@ -505,7 +505,7 @@ export default {
           ? pakket.Opmerking
           : "";
 
-        if (pakket.id > maxID) {
+        if (pakket.id1 > maxID) {
           maxID = pakket.id1;
         }
         rowID++;
