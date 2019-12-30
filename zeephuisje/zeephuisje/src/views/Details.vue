@@ -10,7 +10,12 @@
       <div class="row">
         <div class="col-12 mb-2 mt-2">
           <span class="float-left">
-            <button type="button" class="btn btn-light btn-lg" :disabled="saving" v-on:click="goBack()">
+            <button
+              type="button"
+              class="btn btn-light btn-lg"
+              :disabled="saving"
+              v-on:click="goBack()"
+            >
               <i class="fad fa-long-arrow-left"></i> Terug
             </button>
           </span>
@@ -261,55 +266,55 @@ export default {
         "Keukenhanddoek",
         "Toiletzak",
         "Slaapzak",
-        "Kamppakket",
-      ],
+        "Kamppakket"
+      ]
     };
   },
 
   methods: {
     hasChanges: function() {
       if (JSON.stringify(this.pakketten) != this.originalPakket) {
-        return true
+        return true;
       }
       if (JSON.stringify(this.goederen) != this.originalGoederen) {
-        return true
+        return true;
       }
 
-      return false
+      return false;
     },
     goBack: function() {
-      let vm = this
+      let vm = this;
       let confirmFn = function() {
-          vm.$router.push({ name: 'search' })
-      }
+        vm.$router.push({ name: "search" });
+      };
       if (this.hasChanges()) {
         this.$Simplert.open({
-            title: 'Er zijn niet opgeslagen wijzigingen!',
-            message: 'Ben je zeker dat je wil terug gaan?',
-            type: 'info',
-            useConfirmBtn: true,
-            onConfirm: confirmFn,
-            customConfirmBtnClass: 'btn btn-warning',
-            customConfirmBtnText: 'Ga Terug',
-            customCloseBtnText: 'Sluiten',
-          })
+          title: "Er zijn niet opgeslagen wijzigingen!",
+          message: "Ben je zeker dat je wil terug gaan?",
+          type: "info",
+          useConfirmBtn: true,
+          onConfirm: confirmFn,
+          customConfirmBtnClass: "btn btn-warning",
+          customConfirmBtnText: "Ga Terug",
+          customCloseBtnText: "Sluiten"
+        });
       } else {
-        confirmFn()
+        confirmFn();
       }
     },
     pakketVandaag: function() {
-      const today = new Date()
+      const today = new Date();
       for (let pakket of this.pakketten) {
         if (pakket.datum.getMonth() === today.getMonth()) {
           for (let item of pakket.gekregen) {
             if (item.naam === "Pakket") {
               this.$Simplert.open({
-                title: 'Let Op!',
-                message: 'Heeft deze maand al een pakket gehad!',
-                type: 'error',
-                customCloseBtnText: 'Sluiten',
-              })
-              return
+                title: "Let Op!",
+                message: "Heeft deze maand al een pakket gehad!",
+                type: "error",
+                customCloseBtnText: "Sluiten"
+              });
+              return;
             }
           }
         }
@@ -318,19 +323,21 @@ export default {
       this.pakketten = [
         {
           datum: new Date(),
-          gekregen: [{
-            naam: "Pakket",
-            aantal: 1,
-            id: this.nextID,
-          }],
+          gekregen: [
+            {
+              naam: "Pakket",
+              aantal: 1,
+              id: this.nextID
+            }
+          ],
           opmerking: "",
-          id: this.nextRowID,
+          id: this.nextRowID
         }
       ].concat(this.pakketten);
 
       this.nextRowID++;
-      this.nextID++
-      this.save()
+      this.nextID++;
+      this.save();
     },
     addItem: function(pakket) {
       pakket.gekregen.push({
@@ -444,19 +451,19 @@ export default {
         APIData: {
           id: this.recordID,
           Paketten: zohoPakketten,
-          Goederen: zohoGoederen,
+          Goederen: zohoGoederen
         }
       }).then(function() {
         vm.saving = false;
         vm.$Simplert.open({
-          title: 'Opgeslagen!',
+          title: "Opgeslagen!",
           message: "",
-          type: 'success',
-          customCloseBtnText: 'Sluiten',
-        })
+          type: "success",
+          customCloseBtnText: "Sluiten"
+        });
 
-        vm.originalPakket = JSON.stringify(vm.pakketten)
-        vm.originalGoederen = JSON.stringify(vm.goederen)
+        vm.originalPakket = JSON.stringify(vm.pakketten);
+        vm.originalGoederen = JSON.stringify(vm.goederen);
       });
     }
   },
@@ -510,7 +517,6 @@ export default {
         }
       }
 
-
       let goederenVoorDatum = {};
       for (let pakket of response.data[0].Goederen) {
         if (!goederenVoorDatum[pakket.Datumm]) {
@@ -522,17 +528,19 @@ export default {
           };
         }
 
-        for (let item of pakket.Gekregen) { // legacy data fix
+        for (let item of pakket.Gekregen) {
+          // legacy data fix
           goederenVoorDatum[pakket.Datumm].gekregen.push({
             aantal: pakket.aantal ? pakket.aantal : 1, // legacy data fix
             id: pakket.id1 ? pakket.id1 : maxID + 1, // legacy data fix
             naam: item
           });
-          if (!pakket.id1) { // legacy data fix
-            maxID++
+          if (!pakket.id1) {
+            // legacy data fix
+            maxID++;
           }
         }
-        
+
         goederenVoorDatum[pakket.Datumm].opmerking += pakket.Opmerking
           ? pakket.Opmerking
           : "";
@@ -549,8 +557,8 @@ export default {
         }
       }
 
-      vm.originalPakket = JSON.stringify(vm.pakketten)
-      vm.originalGoederen = JSON.stringify(vm.goederen)
+      vm.originalPakket = JSON.stringify(vm.pakketten);
+      vm.originalGoederen = JSON.stringify(vm.goederen);
 
       vm.nextID = maxID + 1;
       vm.nextRowID = rowID + 1;
