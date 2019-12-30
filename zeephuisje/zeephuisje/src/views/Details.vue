@@ -418,6 +418,16 @@ export default {
 
       for (let pakket of this.pakketten) {
         for (let item of pakket.gekregen) {
+          if (item.naam == "") {
+            vm.$Simplert.open({
+                title: "Veld niet ingevuld!",
+                message: "Een van de items heeft gen pakket type geselecteerd!",
+                type: "error",
+                customCloseBtnText: "Sluiten"
+            });
+            this.saving = false;
+            return
+          }
           zohoPakketten.push({
             Datum: formatDate(pakket.datum),
             id1: item.id,
@@ -434,6 +444,16 @@ export default {
 
       for (let pakket of this.goederen) {
         for (let item of pakket.gekregen) {
+          if (item.naam == "") {
+            vm.$Simplert.open({
+                title: "Veld niet ingevuld!",
+                message: "Een van de items heeft gen pakket type geselecteerd!",
+                type: "error",
+                customCloseBtnText: "Sluiten"
+            });
+            this.saving = false;
+            return
+          }
           zohoGoederen.push({
             Datumm: formatDate(pakket.datum),
             id1: item.id,
