@@ -81,12 +81,23 @@ export default {
       this.searching = true
       window.ZOHO.CRM.API.searchRecord({Entity:"Zeephuisje",Type:"word",Query:`${this.prefix}${this.doelgroepnummer}`}).then(function(res){
         vm.searching = false
+        
+        vm.results = []
+        if (!res.data || res.data.length <= 0) {
+            vm.$Simplert.open({
+                title: "Geen Resultaten!",
+                message: "Geen resultaten gevonden voor de zoekopdracht!",
+                type: "error",
+                customCloseBtnText: "Sluiten"
+            });
+            return
+        }
+
         if (res.data.length === 1) {
             vm.$router.push({ name: 'details', params: { id: res.data[0].id } })
             return
         }
-        
-        vm.results = []
+
         for (let result of res.data) {
           vm.results.push({
             id: res.data[0].id,
