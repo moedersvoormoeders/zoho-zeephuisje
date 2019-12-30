@@ -19,6 +19,14 @@
           <span class="float-right">
             <button
               type="button"
+              class="btn btn-info btn-lg mr-2"
+              v-on:click="pakketVandaag()"
+              :disabled="saving"
+            >
+              <i class="fad fa-box-heart"></i> Pakket Vandaag
+            </button>
+            <button
+              type="button"
               class="btn btn-success btn-lg"
               v-on:click="save()"
               :disabled="saving"
@@ -113,6 +121,74 @@
       <button type="button" class="btn btn-success" v-on:click="addPakketRow()">
         <i class="fas fa-plus-square"></i> Rij Toevoegen
       </button>
+
+      <h3 class="mt-4">Goederen</h3>
+      <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Datum</th>
+            <th scope="col">Gegeven</th>
+            <th scope="col">Opmerking</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="goederPakket in goederen" v-bind:key="goederPakket.id">
+            <td>
+              <datepicker :format="'yyyy-MM-dd'" v-model="goederPakket.datum"></datepicker>
+            </td>
+            <td>
+              <div class="row" v-for="item in goederPakket.gekregen" v-bind:key="item.id">
+                <div class="col-2">
+                  <input v-model="item.aantal" class="form-control" type="number" min="1" />
+                </div>
+                <div class="col">
+                  <multiselect
+                    v-model="item.naam"
+                    :options="getGoederenOptions(goederPakket)"
+                    placeholder="Selecteer een"
+                  ></multiselect>
+                </div>
+                <div class="col-2">
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger mt-1"
+                    v-on:click="removeItem(goederPakket, item.id)"
+                  >
+                    <i class="fas fa-minus-circle"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary mt-2"
+                    v-on:click="addItem(goederPakket)"
+                  >
+                    <i class="fas fa-plus-square"></i> Item Toevoegen
+                  </button>
+                </div>
+              </div>
+            </td>
+            <td>
+              <input v-model="goederPakket.opmerking" class="form-control" placeholder="Opmerking" />
+            </td>
+            <td>
+              <button
+                type="button"
+                class="btn btn-outline-danger"
+                v-on:click="removeGoederen(goederPakket)"
+              >
+                <i class="fad fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="button" class="btn btn-success" v-on:click="addGoederenRow()">
+        <i class="fas fa-plus-square"></i> Rij Toevoegen
+      </button>
     </div>
   </div>
 </template>
@@ -142,6 +218,7 @@ export default {
     return {
       loading: true,
       pakketten: [],
+      goederen: [],
       nextID: 1,
       nextRowID: 1,
       saving: false,
@@ -160,11 +237,72 @@ export default {
         "Luiers 3 EU",
         "Luiers 4 EU",
         "Luiers 5 EU"
-      ]
+      ],
+      goederenOptions: [
+        // TODO: not hard code these
+        "Overtrek 1 Persoon",
+        "Overtrek 2 Personen",
+        "Lakens 1 Persoon",
+        "Lakens 2 Personen",
+        "Kussensloop",
+        "Handdoek",
+        "Badlaken",
+        "Washandje",
+        "Dons 1 Persoon",
+        "Dons 2 Personen",
+        "Deken 1 Persoon",
+        "Deken 2 Personen",
+        "Hoofdkussen",
+        "Fleecedeken",
+        "Bedsprei",
+        "Matrasbeschermer",
+        "Badmat",
+        "Tafelkleed",
+        "Keukenhanddoek",
+        "Toiletzak",
+        "Slaapzak",
+        "Kamppakket",
+      ],
     };
   },
 
   methods: {
+    pakketVandaag: function() {
+
+      const today = new Date()
+      for (let pakket of this.pakketten) {
+        if (pakket.datum.getMonth() === today.getMonth()) {
+          for (let item of pakket.gekregen) {
+            if (item.naam === "Pakket") {
+              this.$Simplert.open({
+                title: 'Let Op!',
+                message: 'Heeft deze maand al een pakket gehad!',
+                type: 'error',
+                customCloseBtnText: 'Sluiten',
+              })
+              return
+            }
+          }
+        }
+      }
+
+      this.pakketten = [
+        {
+          datum: new Date(),
+          gekregen: [{
+            naam: "Pakket",
+            aantal: 1,
+            id: this.nextID,
+          }],
+          opmerking: "",
+          id: this.nextRowID,
+        }
+      ].concat(this.pakketten);
+
+      this.nextRowID++;
+      this.nextID++
+      this.save()
+    },
     addItem: function(pakket) {
       pakket.gekregen.push({
         aantal: 1,
@@ -191,6 +329,18 @@ export default {
 
       this.nextRowID++;
     },
+    addGoederenRow: function() {
+      this.goederen = [
+        {
+          datum: new Date(),
+          gekregen: [],
+          opmerking: "",
+          id: this.nextRowID
+        }
+      ].concat(this.goederen);
+
+      this.nextRowID++;
+    },
     getPakketOptions: function(pakket) {
       return this.pakketOptions.filter(function(value) {
         for (let hadItem of pakket.gekregen) {
@@ -202,8 +352,24 @@ export default {
         return true;
       });
     },
+    getGoederenOptions: function(pakket) {
+      return this.goederenOptions.filter(function(value) {
+        for (let hadItem of pakket.gekregen) {
+          if (hadItem.naam == value) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+    },
     removePakket: function(pakket) {
       this.pakketten = this.pakketten.filter(function(value) {
+        return value.id != pakket.id;
+      });
+    },
+    removeGoederen: function(pakket) {
+      this.goederen = this.goederen.filter(function(value) {
         return value.id != pakket.id;
       });
     },
@@ -227,12 +393,29 @@ export default {
         }
       }
 
+      let zohoGoederen = [];
+      let doneGoederenDatum = {};
+
+      for (let pakket of this.goederen) {
+        for (let item of pakket.gekregen) {
+          zohoGoederen.push({
+            Datumm: formatDate(pakket.datum),
+            id1: item.id,
+            Gekregen: [item.naam],
+            aantal: item.aantal,
+            Opemerking: doneGoederenDatum[pakket.datum] ? "" : pakket.opmerking
+          });
+          doneGoederenDatum[pakket.datum] = true;
+        }
+      }
+
       window.ZOHO.CRM.API.updateRecord({
         Entity: "Zeephuisje",
         Trigger: ["workflow"],
         APIData: {
           id: this.recordID,
-          Paketten: zohoPakketten
+          Paketten: zohoPakketten,
+          Goederen: zohoGoederen,
         }
       }).then(function() {
         vm.saving = false;
@@ -279,8 +462,8 @@ export default {
           naam: pakket.Gekregen[0]
         });
 
-        pakketVoorDatum[pakket.Datum].opmerking += pakket.Opmerking
-          ? pakket.Opmerking
+        pakketVoorDatum[pakket.Datum].opmerking += pakket.Opemerking
+          ? pakket.Opemerking
           : "";
 
         if (pakket.id > maxID) {
@@ -292,6 +475,45 @@ export default {
       for (let datum in pakketVoorDatum) {
         if (pakketVoorDatum.hasOwnProperty(datum)) {
           vm.pakketten.push(pakketVoorDatum[datum]);
+        }
+      }
+
+
+      let goederenVoorDatum = {};
+      for (let pakket of response.data[0].Goederen) {
+        if (!goederenVoorDatum[pakket.Datumm]) {
+          goederenVoorDatum[pakket.Datumm] = {
+            datum: new Date(pakket.Datumm),
+            gekregen: [],
+            opmerking: "",
+            id: rowID
+          };
+        }
+
+        for (let item of pakket.Gekregen) { // legacy data fix
+          goederenVoorDatum[pakket.Datumm].gekregen.push({
+            aantal: pakket.aantal ? pakket.aantal : 1, // legacy data fix
+            id: pakket.id1 ? pakket.id1 : maxID + 1, // legacy data fix
+            naam: item
+          });
+          if (!pakket.id1) { // legacy data fix
+            maxID++
+          }
+        }
+        
+        goederenVoorDatum[pakket.Datumm].opmerking += pakket.Opmerking
+          ? pakket.Opmerking
+          : "";
+
+        if (pakket.id > maxID) {
+          maxID = pakket.id1;
+        }
+        rowID++;
+      }
+
+      for (let datum in goederenVoorDatum) {
+        if (goederenVoorDatum.hasOwnProperty(datum)) {
+          vm.goederen.push(goederenVoorDatum[datum]);
         }
       }
 
