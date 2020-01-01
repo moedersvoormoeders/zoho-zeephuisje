@@ -62,7 +62,13 @@
           <textarea class="form-control" v-model="opmerking" rows="2"></textarea>
         </div>
         <div class="col-4">
-          <h5>Stop</h5>Coming sooon!
+          <h5>Totalen</h5>
+          <ul>
+            <li v-for="total in totals" v-bind:key="total.naam">{{total.naam}}: {{total.aantal}}
+              <span v-if="total.naam=='Overtrek 2 Personen'">/ 2</span>
+              <span v-if="total.naam=='Overtrek 1 Persoon'">/ {{2 * aantalKinderen }}</span>  
+            </li>
+          </ul>
         </div>
       </div>
       <div class="row">
@@ -291,7 +297,34 @@ export default {
       ]
     };
   },
+  computed: {
+    totals: function() {
+      let totals = {}
 
+      for (let pakket of this.goederen) {
+        for (let item of pakket.gekregen) {
+          if (!totals[item.naam]) {
+            totals[item.naam] = 0
+          }
+          totals[item.naam] += parseInt(item.aantal)
+          // TODO add date conditional!
+        }
+      }
+
+      let totalsArray = []
+      for (let total in totals) {
+        totalsArray.push({
+          naam: total,
+          aantal: totals[total],
+        })
+      }
+      return totalsArray.sort((a,b)=> (a||{}).naam > (b||{}).naam)
+    },
+    aantalKinderen: function() {
+      // small hack to not add more fields in Zoho
+      return this.info.huishouden.split("meisje").length + this.info.huishouden.split("jongen").length
+    }
+  },
   methods: {
     hasChanges: function() {
       console.log(JSON.stringify(this.info))

@@ -54,7 +54,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="result in results" v-bind:key="result">
+            <tr v-for="result in results" v-bind:key="result.id">
               <td>
                 <a :href="'#/details/'+result.id">{{result.doelgroepnummer}}</a>
               </td>
@@ -111,7 +111,7 @@ export default {
 
         for (let result of res.data) {
           vm.results.push({
-            id: res.data[0].id,
+            id: result.id,
             naam: result.Naam,
             voornaam: result.Voornaam,
             doelgroepnummer: result.Doelgroep_Nummer
