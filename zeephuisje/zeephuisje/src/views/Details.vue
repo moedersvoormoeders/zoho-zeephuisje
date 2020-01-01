@@ -299,15 +299,20 @@ export default {
   },
   computed: {
     totals: function() {
+      let today = new Date()
       let totals = {}
 
       for (let pakket of this.goederen) {
-        for (let item of pakket.gekregen) {
-          if (!totals[item.naam]) {
-            totals[item.naam] = 0
+        if (pakket.datum.getFullYear() === today.getFullYear()) {
+          for (let item of pakket.gekregen) {
+            if (!item.naam) {
+              continue
+            }
+            if (!totals[item.naam]) {
+              totals[item.naam] = 0
+            }
+            totals[item.naam] += parseInt(item.aantal)
           }
-          totals[item.naam] += parseInt(item.aantal)
-          // TODO add date conditional!
         }
       }
 
@@ -322,7 +327,7 @@ export default {
     },
     aantalKinderen: function() {
       // small hack to not add more fields in Zoho
-      return this.info.huishouden.split("meisje").length + this.info.huishouden.split("jongen").length
+      return this.info.huishouden.split("Meisje").length + this.info.huishouden.split("Jongen").length - 2 // 4 is the default if empty
     }
   },
   methods: {
@@ -653,3 +658,8 @@ export default {
 </script>
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+<style>
+  ul {
+    padding-left: 20px;
+  }
+</style>
