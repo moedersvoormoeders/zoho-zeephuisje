@@ -41,19 +41,27 @@
       </div>
       <h3>Info</h3>
       <div class="row mb-3">
-        <div class="col-6 mb-3">
+        <div class="col-4 mb-3">
           <h5>Naam</h5>
           {{info.name}}
         </div>
-        <div class="col-6 mb-3">
+        <div class="col-4 mb-3">
           <h5>Doelgroepnummer</h5>
           {{info.doelgroepnummer}}
         </div>
-        <div class="col-6">
+        <div class="col-4 mb-3">
+          <h5>Code</h5>
+          {{info.code}}
+        </div>
+        <div class="col-4">
           <h5>Huishouden</h5>
           <pre>{{info.huishouden}}</pre>
         </div>
-        <div class="col-6">
+        <div class="col-4">
+          <h5>Opmerking</h5>
+          <textarea class="form-control" v-model="opmerking" rows="2"></textarea>
+        </div>
+        <div class="col-4">
           <h5>Stop</h5>Coming sooon!
         </div>
       </div>
@@ -229,6 +237,7 @@ export default {
       saving: false,
       recordID: "",
       info: {},
+      opmerking: "",
       pakketOptions: [
         // TODO: not hard code these
         "Pakket",
@@ -273,12 +282,17 @@ export default {
 
   methods: {
     hasChanges: function() {
+      console.log(JSON.stringify(this.info))
       if (JSON.stringify(this.pakketten) != this.originalPakket) {
         return true;
       }
       if (JSON.stringify(this.goederen) != this.originalGoederen) {
         return true;
       }
+      if (this.info.opmerking != this.opmerking) {
+        return true;
+      }
+      console.log(JSON.stringify(this.info))
 
       return false;
     },
@@ -471,7 +485,8 @@ export default {
         APIData: {
           id: this.recordID,
           Paketten: zohoPakketten,
-          Goederen: zohoGoederen
+          Goederen: zohoGoederen,
+          Opmerking: vm.info.opmerking,
         }
       }).then(function() {
         vm.saving = false;
@@ -484,6 +499,7 @@ export default {
 
         vm.originalPakket = JSON.stringify(vm.pakketten);
         vm.originalGoederen = JSON.stringify(vm.goederen);
+        vm.info.opmerking = vm.opmerking;
       });
     }
   },
@@ -501,6 +517,8 @@ export default {
       vm.info.name = `${response.data[0].Voornaam} ${response.data[0].Naam}`;
       vm.info.huishouden = response.data[0].Huishouden;
       vm.info.doelgroepnummer = response.data[0].Doelgroep_Nummer;
+      vm.info.code = response.data[0].Code;
+      vm.info.opmerking = response.data[0].Opmerking ? response.data[0].Opmerking  : "";
 
       let maxID = 1;
       let rowID = 1;
@@ -579,6 +597,7 @@ export default {
 
       vm.originalPakket = JSON.stringify(vm.pakketten);
       vm.originalGoederen = JSON.stringify(vm.goederen);
+      vm.opmerking = vm.info.opmerking;
 
       vm.nextID = maxID + 1;
       vm.nextRowID = rowID + 1;
