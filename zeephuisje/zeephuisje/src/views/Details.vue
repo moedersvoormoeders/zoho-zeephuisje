@@ -65,7 +65,16 @@
           <h5>Stop</h5>Coming sooon!
         </div>
       </div>
-      <h3>Pakketten</h3>
+      <div class="row">
+        <h3 class="col-12">
+          Pakketten
+          <span class="float-right">
+            <button type="button" class="btn btn-success" v-on:click="addPakketRow()">
+              <i class="fas fa-plus-square"></i> Rij Toevoegen
+            </button>
+          </span>
+        </h3>
+      </div>
       <table class="table">
         <thead class="thead-dark">
           <tr>
@@ -129,11 +138,17 @@
           </tr>
         </tbody>
       </table>
-      <button type="button" class="btn btn-success" v-on:click="addPakketRow()">
-        <i class="fas fa-plus-square"></i> Rij Toevoegen
-      </button>
-
-      <h3 class="mt-4">Goederen</h3>
+      
+      <div class="row">
+        <h3 class="col-12">
+          Goederen
+          <span class="float-right">
+            <button type="button" class="btn btn-success" v-on:click="addGoederenRow()">
+              <i class="fas fa-plus-square"></i> Rij Toevoegen
+            </button>
+          </span>
+        </h3>
+      </div>
       <table class="table">
         <thead class="thead-dark">
           <tr>
@@ -197,9 +212,6 @@
           </tr>
         </tbody>
       </table>
-      <button type="button" class="btn btn-success" v-on:click="addGoederenRow()">
-        <i class="fas fa-plus-square"></i> Rij Toevoegen
-      </button>
     </div>
   </div>
 </template>
