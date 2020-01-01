@@ -7,6 +7,12 @@ require('vue2-simplert-plugin/dist/vue2-simplert-plugin.css')
 Vue.use(Simplert)
 Vue.config.productionTip = false
 
+Vue.directive('focus', {
+  inserted: function (el) {
+      el.focus()
+  }
+})
+
 new Vue({
   router,
   render: h => h(App)
