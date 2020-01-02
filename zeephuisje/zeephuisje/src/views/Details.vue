@@ -26,7 +26,7 @@
               v-on:click="pakketVandaag()"
               :disabled="saving"
             >
-              <font-awesome-icon :icon="['fad', 'fa-box-heart']" /> Pakket Vandaag
+              <font-awesome-icon :icon="['fad', 'box-heart']" /> Pakket Vandaag
             </button>
             <button
               type="button"
