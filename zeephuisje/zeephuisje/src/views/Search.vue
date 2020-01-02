@@ -25,7 +25,7 @@
               v-on:click="search()"
               :disabled="searching"
             >
-              <i class="fas fa-search"></i> Zoeken
+              <font-awesome-icon :icon="['fas', 'search']" /> Zoeken
             </button>
           </div>
         </div>

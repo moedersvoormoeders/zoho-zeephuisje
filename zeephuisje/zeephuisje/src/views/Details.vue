@@ -16,7 +16,7 @@
               :disabled="saving"
               v-on:click="goBack()"
             >
-              <i class="fad fa-long-arrow-left"></i> Terug
+              <font-awesome-icon :icon="['fad', 'long-arrow-left']" /> Terug
             </button>
           </span>
           <span class="float-right">
@@ -26,7 +26,7 @@
               v-on:click="pakketVandaag()"
               :disabled="saving"
             >
-              <i class="fad fa-box-heart"></i> Pakket Vandaag
+              <font-awesome-icon :icon="['fad', 'fa-box-heart']" /> Pakket Vandaag
             </button>
             <button
               type="button"
@@ -34,7 +34,7 @@
               v-on:click="save()"
               :disabled="saving || !hasChanges()"
             >
-              <i class="far fa-save"></i> Opslaan
+              <font-awesome-icon :icon="['far', 'save']" /> Opslaan
             </button>
           </span>
         </div>
@@ -76,7 +76,7 @@
           Pakketten
           <span class="float-right">
             <button type="button" class="btn btn-success" v-on:click="addPakketRow()">
-              <i class="fas fa-plus-square"></i> Rij Toevoegen
+              <font-awesome-icon :icon="['fas', 'plus-square']" /> Rij Toevoegen
             </button>
           </span>
         </h3>
@@ -113,7 +113,7 @@
                     class="btn btn-outline-danger mt-1"
                     v-on:click="removeItem(pakket, item.id)"
                   >
-                    <i class="fas fa-minus-circle"></i>
+                    <font-awesome-icon :icon="['fas', 'minus-circle']" />
                   </button>
                 </div>
               </div>
@@ -124,7 +124,7 @@
                     class="btn btn-outline-primary mt-2"
                     v-on:click="addItem(pakket)"
                   >
-                    <i class="fas fa-plus-square"></i> Item Toevoegen
+                    <font-awesome-icon :icon="['fas', 'plus-square']" /> Item Toevoegen
                   </button>
                 </div>
               </div>
@@ -138,7 +138,7 @@
                 class="btn btn-outline-danger"
                 v-on:click="removePakket(pakket)"
               >
-                <i class="fad fa-trash"></i>
+                <font-awesome-icon :icon="['fad', 'trash']" />
               </button>
             </td>
           </tr>
@@ -150,7 +150,7 @@
           Goederen
           <span class="float-right">
             <button type="button" class="btn btn-success" v-on:click="addGoederenRow()">
-              <i class="fas fa-plus-square"></i> Rij Toevoegen
+              <font-awesome-icon :icon="['fas', 'plus-square']" /> Rij Toevoegen
             </button>
           </span>
         </h3>
@@ -187,7 +187,7 @@
                     class="btn btn-outline-danger mt-1"
                     v-on:click="removeItem(goederPakket, item.id)"
                   >
-                    <i class="fas fa-minus-circle"></i>
+                    <font-awesome-icon :icon="['fas', 'minus-circle']" />
                   </button>
                 </div>
               </div>
@@ -198,7 +198,7 @@
                     class="btn btn-outline-primary mt-2"
                     v-on:click="addItem(goederPakket)"
                   >
-                    <i class="fas fa-plus-square"></i> Item Toevoegen
+                    <font-awesome-icon :icon="['fas', 'plus-square']" /> Item Toevoegen
                   </button>
                 </div>
               </div>
@@ -212,7 +212,7 @@
                 class="btn btn-outline-danger"
                 v-on:click="removeGoederen(goederPakket)"
               >
-                <i class="fad fa-trash"></i>
+                <font-awesome-icon :icon="['fad', 'trash']" />
               </button>
             </td>
           </tr>
