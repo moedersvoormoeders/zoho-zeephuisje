@@ -264,11 +264,13 @@ export default {
         "Luiers 3",
         "Luiers 4",
         "Luiers 5",
+        "Luiers 6",
         "Luiers 1 EU",
         "Luiers 2 EU",
         "Luiers 3 EU",
         "Luiers 4 EU",
-        "Luiers 5 EU"
+        "Luiers 5 EU",
+        "Luiers 6 EU",
       ],
       goederenOptions: [
         // TODO: not hard code these
