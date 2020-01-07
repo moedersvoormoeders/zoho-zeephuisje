@@ -51,7 +51,7 @@
         </div>
         <div class="col-4 mb-3">
           <h5>Code</h5>
-          {{info.code}}
+          <span :style="info.code.indexOf('NB') >= 0 ? 'color: red;' : ''">{{info.code}}</span>
         </div>
         <div class="col-4">
           <h5>Huishouden</h5>
