@@ -536,7 +536,7 @@ export default {
           id: this.recordID,
           Paketten: zohoPakketten,
           Goederen: zohoGoederen,
-          Opmerking: vm.info.opmerking,
+          Opmerking: vm.opmerking,
         }
       }).then(function() {
         vm.saving = false;
