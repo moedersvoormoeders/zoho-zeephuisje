@@ -259,18 +259,18 @@ export default {
       pakketOptions: [
         // TODO: not hard code these
         "Pakket",
-        "Luiers 1",
-        "Luiers 2",
-        "Luiers 3",
-        "Luiers 4",
-        "Luiers 5",
-        "Luiers 6",
         "Luiers 1 EU",
         "Luiers 2 EU",
         "Luiers 3 EU",
         "Luiers 4 EU",
         "Luiers 5 EU",
         "Luiers 6 EU",
+        "Luiers 1",
+        "Luiers 2",
+        "Luiers 3",
+        "Luiers 4",
+        "Luiers 5",
+        "Luiers 6",
       ],
       goederenOptions: [
         // TODO: not hard code these
