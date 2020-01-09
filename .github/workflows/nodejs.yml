@@ -14,7 +14,7 @@ jobs:
     - name: Add FA token
       run: |
         npm config set "@fortawesome:registry" https://npm.fontawesome.com/ && \
-        npm config set "//npm.fontawesome.com/:_authToken" ${secrets.FA_TOKEN}
+        npm config set "//npm.fontawesome.com/:_authToken" ${{secrets.FA_TOKEN}}
     - name: Install zoho utils
       run: |
         npm install -g zoho-extension-toolkit
