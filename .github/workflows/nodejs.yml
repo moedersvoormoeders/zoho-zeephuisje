@@ -14,10 +14,16 @@ jobs:
     - name: Install zoho utils
       run: |
         npm install -g zoho-extension-toolkit
+    - name: Install vue utils
+      run: |
+        npm install -g @vue/cli
     - name: npm build
       run: |
         cd zeephuisje
         npm install
+        cd zeephuisje
+        npm install
+        cd ..
         npm run build
       env:
         CI: true
