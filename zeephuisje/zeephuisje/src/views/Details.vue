@@ -91,7 +91,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="pakket in pakketten" v-bind:key="pakket.id">
+          <tr v-for="pakket in pakketten.slice(0,this.showPakketAmount)" v-bind:key="pakket.id">
             <td>
               <datepicker :format="'yyyy-MM-dd'" v-model="pakket.datum"></datepicker>
             </td>
@@ -144,6 +144,14 @@
           </tr>
         </tbody>
       </table>
+
+      <div class="row" v-if="pakketten.length > showPakketAmount">
+        <div class="col">
+            <button type="button" class="btn btn-secondary" v-on:click="showAll()">
+              <font-awesome-icon :icon="['fas', 'infinity']" /> Toon meer
+            </button>
+        </div>
+      </div>
       
       <div class="row">
         <h3 class="col-12">
@@ -252,6 +260,7 @@ export default {
       originalGoederen: "", //JSON stored here
       nextID: 1,
       nextRowID: 1,
+      showPakketAmount: 3,
       saving: false,
       recordID: "",
       info: {},
@@ -474,6 +483,9 @@ export default {
       this.goederen = this.goederen.filter(function(value) {
         return value.id != pakket.id;
       });
+    },
+    showAll: function() {
+      this.showPakketAmount = this.pakketten.length
     },
     save: function() {
       let vm = this;
