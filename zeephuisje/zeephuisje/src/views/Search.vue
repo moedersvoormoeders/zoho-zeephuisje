@@ -15,7 +15,7 @@
               <div class="input-group-prepend">
                 <div class="input-group-text">{{prefix}}</div>
               </div>
-              <input type="text" class="form-control" v-model="doelgroepnummer" placeholder="1234" v-focus />
+              <input type="text" class="form-control" v-model="doelgroepnummer" placeholder="" v-focus />
             </div>
           </div>
           <div class="co-4">
