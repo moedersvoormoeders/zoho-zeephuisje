@@ -11,30 +11,30 @@
         <div class="col-12 mb-2 mt-2">
           <span class="float-left">
             <button
-              type="button"
-              class="btn btn-light btn-lg"
-              :disabled="saving"
-              v-on:click="goBack()"
+                type="button"
+                class="btn btn-light btn-lg"
+                :disabled="saving"
+                v-on:click="goBack()"
             >
-              <font-awesome-icon :icon="['fad', 'long-arrow-left']" /> Terug
+              <font-awesome-icon :icon="['fad', 'long-arrow-left']"/> Terug
             </button>
           </span>
           <span class="float-right">
             <button
-              type="button"
-              class="btn btn-info btn-lg mr-2"
-              v-on:click="pakketVandaag()"
-              :disabled="saving"
+                type="button"
+                class="btn btn-info btn-lg mr-2"
+                v-on:click="pakketVandaag()"
+                :disabled="saving"
             >
-              <font-awesome-icon :icon="['fad', 'box-heart']" /> Pakket Vandaag
+              <font-awesome-icon :icon="['fad', 'box-heart']"/> Pakket Vandaag
             </button>
             <button
-              type="button"
-              class="btn btn-success btn-lg"
-              v-on:click="save()"
-              :disabled="saving || !hasChanges()"
+                type="button"
+                class="btn btn-success btn-lg"
+                v-on:click="save()"
+                :disabled="saving || !hasChanges()"
             >
-              <font-awesome-icon :icon="['far', 'save']" /> Opslaan
+              <font-awesome-icon :icon="['far', 'save']"/> Opslaan
             </button>
           </span>
         </div>
@@ -43,19 +43,19 @@
       <div class="row mb-3">
         <div class="col-4 mb-3">
           <h5>Naam</h5>
-          {{info.name}}
+          {{ info.name }}
         </div>
         <div class="col-4 mb-3">
           <h5>Doelgroepnummer</h5>
-          {{info.doelgroepnummer}}
+          {{ info.doelgroepnummer }}
         </div>
         <div class="col-4 mb-3">
           <h5>Code</h5>
-          <span :style="(info.code || '').indexOf('NB') >= 0 ? 'color: red;' : ''">{{info.code}}</span>
+          <span :style="(info.code || '').indexOf('NB') >= 0 ? 'color: red;' : ''">{{ info.code }}</span>
         </div>
         <div class="col-4">
           <h5>Huishouden</h5>
-          <pre>{{info.huishouden}}</pre>
+          <pre>{{ info.huishouden }}</pre>
         </div>
         <div class="col-4">
           <h5>Opmerking</h5>
@@ -64,168 +64,216 @@
         <div class="col-4">
           <h5>Totalen</h5>
           <ul>
-            <li v-for="total in totals" v-bind:key="total.naam">{{total.naam}}: {{total.aantal}}
+            <li v-for="total in totals" v-bind:key="total.naam">{{ total.naam }}: {{ total.aantal }}
               <span v-if="total.naam=='Overtrek 2 Personen'">/ 2</span>
-              <span v-if="total.naam=='Overtrek 1 Persoon'">/ {{2 * aantalKinderen }}</span>  
+              <span v-if="total.naam=='Overtrek 1 Persoon'">/ {{ 2 * aantalKinderen }}</span>
             </li>
           </ul>
         </div>
       </div>
       <div class="row">
-        <h3 class="col-12">
-          Pakketten
-          <span class="float-right">
-            <button type="button" class="btn btn-success" v-on:click="addPakketRow()">
-              <font-awesome-icon :icon="['fas', 'plus-square']" /> Rij Toevoegen
-            </button>
-          </span>
-        </h3>
-      </div>
-      <table class="table">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">Datum</th>
-            <th scope="col">Gegeven</th>
-            <th scope="col">Opmerking</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="pakket in pakketten.slice(0,this.showPakketAmount)" v-bind:key="pakket.id">
-            <td>
-              <datepicker :format="'yyyy-MM-dd'" v-model="pakket.datum"></datepicker>
-            </td>
-            <td>
-              <div class="row" v-for="item in pakket.gekregen" v-bind:key="item.id">
-                <div class="col-2">
-                  <input v-model="item.aantal" class="form-control" type="number" min="1" />
-                </div>
-                <div class="col">
-                  <multiselect
-                    v-model="item.naam"
-                    :options="getPakketOptions(pakket)"
-                    placeholder="Selecteer een"
-                  ></multiselect>
-                </div>
-                <div class="col-2">
-                  <button
-                    type="button"
-                    class="btn btn-outline-danger mt-1"
-                    v-on:click="removeItem(pakket, item.id)"
-                  >
-                    <font-awesome-icon :icon="['fas', 'minus-circle']" />
-                  </button>
-                </div>
+        <div class="col-12 mx-auto">
+          <div id="accordion" class="accordion">
+            <div>
+              <div id="pakket-heading" class="card-header bg-white shadow-sm border-0">
+                <h6 class="mb-0 font-weight-bold">
+                  <a
+                      href="#"
+                      data-toggle="collapse"
+                      data-target="#pakket"
+                      aria-expanded="false"
+                      aria-controls="pakket"
+                      class="d-block position-relative text-dark text-uppercase collapsible-link py-2"
+                  >Pakketten</a>
+                </h6>
               </div>
-              <div class="row">
-                <div class="col">
-                  <button
-                    type="button"
-                    class="btn btn-outline-primary mt-2"
-                    v-on:click="addItem(pakket)"
-                  >
-                    <font-awesome-icon :icon="['fas', 'plus-square']" /> Item Toevoegen
-                  </button>
-                </div>
-              </div>
-            </td>
-            <td>
-              <input v-model="pakket.opmerking" class="form-control" placeholder="Opmerking" />
-            </td>
-            <td>
-              <button
-                type="button"
-                class="btn btn-outline-danger"
-                v-on:click="removePakket(pakket)"
+              <div
+                  id="pakket"
+                  aria-labelledby="pakket"
+                  data-parent="#accordion"
+                  class="collapse"
               >
-                <font-awesome-icon :icon="['fad', 'trash']" />
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-2 ml-auto">
+                      <button type="button" class="btn btn-success" v-on:click="addPakketRow()">
+                        <font-awesome-icon :icon="['fas', 'plus-square']"/> Rij Toevoegen
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <table class="table">
+                  <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Datum</th>
+                    <th scope="col">Gegeven</th>
+                    <th scope="col">Opmerking</th>
+                    <th scope="col"></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr v-for="pakket in pakketten.slice(0,this.showPakketAmount)" v-bind:key="pakket.id">
+                    <td>
+                      <datepicker :format="'yyyy-MM-dd'" v-model="pakket.datum"></datepicker>
+                    </td>
+                    <td>
+                      <div class="row" v-for="item in pakket.gekregen" v-bind:key="item.id">
+                        <div class="col-2">
+                          <input v-model="item.aantal" class="form-control" type="number" min="1"/>
+                        </div>
+                        <div class="col">
+                          <multiselect
+                              v-model="item.naam"
+                              :options="getPakketOptions(pakket)"
+                              placeholder="Selecteer een"
+                          ></multiselect>
+                        </div>
+                        <div class="col-2">
+                          <button
+                              type="button"
+                              class="btn btn-outline-danger mt-1"
+                              v-on:click="removeItem(pakket, item.id)"
+                          >
+                            <font-awesome-icon :icon="['fas', 'minus-circle']"/>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <button
+                              type="button"
+                              class="btn btn-outline-primary mt-2"
+                              v-on:click="addItem(pakket)"
+                          >
+                            <font-awesome-icon :icon="['fas', 'plus-square']"/>
+                            Item Toevoegen
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <input v-model="pakket.opmerking" class="form-control" placeholder="Opmerking"/>
+                    </td>
+                    <td>
+                      <button
+                          type="button"
+                          class="btn btn-outline-danger"
+                          v-on:click="removePakket(pakket)"
+                      >
+                        <font-awesome-icon :icon="['fad', 'trash']"/>
+                      </button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
 
-      <div class="row" v-if="pakketten.length > showPakketAmount">
-        <div class="col">
-            <button type="button" class="btn btn-secondary" v-on:click="showAll()">
-              <font-awesome-icon :icon="['fas', 'infinity']" /> Toon meer
-            </button>
+                <div class="row" v-if="pakketten.length > showPakketAmount">
+                  <div class="col">
+                    <button type="button" class="btn btn-secondary" v-on:click="showAll()">
+                      <font-awesome-icon :icon="['fas', 'infinity']"/>
+                      Toon meer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div id="goederen-heading" class="card-header bg-white shadow-sm border-0">
+                <h6 class="mb-0 font-weight-bold">
+                  <a
+                      href="#"
+                      data-toggle="collapse"
+                      data-target="#goederen"
+                      aria-expanded="false"
+                      aria-controls="goederen"
+                      class="d-block position-relative text-dark text-uppercase collapsible-link py-2"
+                  >Goederen</a>
+                </h6>
+              </div>
+              <div
+                  id="goederen"
+                  aria-labelledby="goederen"
+                  data-parent="#accordion"
+                  class="collapse"
+              >
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-2 ml-auto">
+                      <button type="button" class="btn btn-success" v-on:click="addGoederenRow()">
+                        <font-awesome-icon :icon="['fas', 'plus-square']"/> Rij Toevoegen
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <table class="table">
+                  <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Datum</th>
+                    <th scope="col">Gegeven</th>
+                    <th scope="col">Opmerking</th>
+                    <th scope="col"></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr v-for="goederPakket in goederen" v-bind:key="goederPakket.id">
+                    <td>
+                      <datepicker :format="'yyyy-MM-dd'" v-model="goederPakket.datum"></datepicker>
+                    </td>
+                    <td>
+                      <div class="row" v-for="item in goederPakket.gekregen" v-bind:key="item.id">
+                        <div class="col-2">
+                          <input v-model="item.aantal" class="form-control" type="number" min="1"/>
+                        </div>
+                        <div class="col">
+                          <multiselect
+                              v-model="item.naam"
+                              :options="getGoederenOptions(goederPakket)"
+                              placeholder="Selecteer een"
+                          ></multiselect>
+                        </div>
+                        <div class="col-2">
+                          <button
+                              type="button"
+                              class="btn btn-outline-danger mt-1"
+                              v-on:click="removeItem(goederPakket, item.id)"
+                          >
+                            <font-awesome-icon :icon="['fas', 'minus-circle']"/>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <button
+                              type="button"
+                              class="btn btn-outline-primary mt-2"
+                              v-on:click="addItem(goederPakket)"
+                          >
+                            <font-awesome-icon :icon="['fas', 'plus-square']"/>
+                            Item Toevoegen
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <input v-model="goederPakket.opmerking" class="form-control" placeholder="Opmerking"/>
+                    </td>
+                    <td>
+                      <button
+                          type="button"
+                          class="btn btn-outline-danger"
+                          v-on:click="removeGoederen(goederPakket)"
+                      >
+                        <font-awesome-icon :icon="['fad', 'trash']"/>
+                      </button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      
-      <div class="row">
-        <h3 class="col-12">
-          Goederen
-          <span class="float-right">
-            <button type="button" class="btn btn-success" v-on:click="addGoederenRow()">
-              <font-awesome-icon :icon="['fas', 'plus-square']" /> Rij Toevoegen
-            </button>
-          </span>
-        </h3>
-      </div>
-      <table class="table">
-        <thead class="thead-dark">
-          <tr>
-            <th scope="col">Datum</th>
-            <th scope="col">Gegeven</th>
-            <th scope="col">Opmerking</th>
-            <th scope="col"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="goederPakket in goederen" v-bind:key="goederPakket.id">
-            <td>
-              <datepicker :format="'yyyy-MM-dd'" v-model="goederPakket.datum"></datepicker>
-            </td>
-            <td>
-              <div class="row" v-for="item in goederPakket.gekregen" v-bind:key="item.id">
-                <div class="col-2">
-                  <input v-model="item.aantal" class="form-control" type="number" min="1" />
-                </div>
-                <div class="col">
-                  <multiselect
-                    v-model="item.naam"
-                    :options="getGoederenOptions(goederPakket)"
-                    placeholder="Selecteer een"
-                  ></multiselect>
-                </div>
-                <div class="col-2">
-                  <button
-                    type="button"
-                    class="btn btn-outline-danger mt-1"
-                    v-on:click="removeItem(goederPakket, item.id)"
-                  >
-                    <font-awesome-icon :icon="['fas', 'minus-circle']" />
-                  </button>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <button
-                    type="button"
-                    class="btn btn-outline-primary mt-2"
-                    v-on:click="addItem(goederPakket)"
-                  >
-                    <font-awesome-icon :icon="['fas', 'plus-square']" /> Item Toevoegen
-                  </button>
-                </div>
-              </div>
-            </td>
-            <td>
-              <input v-model="goederPakket.opmerking" class="form-control" placeholder="Opmerking" />
-            </td>
-            <td>
-              <button
-                type="button"
-                class="btn btn-outline-danger"
-                v-on:click="removeGoederen(goederPakket)"
-              >
-                <font-awesome-icon :icon="['fad', 'trash']" />
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </template>
@@ -236,8 +284,8 @@ import Multiselect from "vue-multiselect";
 
 function formatDate(d) {
   var month = "" + (d.getMonth() + 1),
-    day = "" + d.getDate(),
-    year = d.getFullYear();
+      day = "" + d.getDate(),
+      year = d.getFullYear();
 
   if (month.length < 2) month = "0" + month;
   if (day.length < 2) day = "0" + day;
@@ -251,7 +299,7 @@ export default {
     Datepicker,
     Multiselect
   },
-  data: function() {
+  data: function () {
     return {
       loading: true,
       pakketten: [],
@@ -309,7 +357,7 @@ export default {
     };
   },
   computed: {
-    totals: function() {
+    totals: function () {
       let today = new Date()
       let totals = {}
 
@@ -334,15 +382,15 @@ export default {
           aantal: totals[total],
         })
       }
-      return totalsArray.sort((a,b)=> (a||{}).naam > (b||{}).naam)
+      return totalsArray.sort((a, b) => (a || {}).naam > (b || {}).naam)
     },
-    aantalKinderen: function() {
+    aantalKinderen: function () {
       // small hack to not add more fields in Zoho
       return this.info.huishouden.split("Meisje").length + this.info.huishouden.split("Jongen").length - 2 // 4 is the default if empty
     }
   },
   methods: {
-    hasChanges: function() {
+    hasChanges: function () {
       console.log(JSON.stringify(this.info))
       if (JSON.stringify(this.pakketten) != this.originalPakket) {
         return true;
@@ -357,10 +405,10 @@ export default {
 
       return false;
     },
-    goBack: function() {
+    goBack: function () {
       let vm = this;
-      let confirmFn = function() {
-        vm.$router.push({ name: "search" });
+      let confirmFn = function () {
+        vm.$router.push({name: "search"});
       };
       if (this.hasChanges()) {
         this.$Simplert.open({
@@ -377,7 +425,7 @@ export default {
         confirmFn();
       }
     },
-    pakketVandaag: function() {
+    pakketVandaag: function () {
       const today = new Date();
       for (let pakket of this.pakketten) {
         if (pakket.datum.getMonth() === today.getMonth()) {
@@ -414,7 +462,7 @@ export default {
       this.nextID++;
       this.save();
     },
-    addItem: function(pakket) {
+    addItem: function (pakket) {
       pakket.gekregen.push({
         aantal: 1,
         id: this.nextID,
@@ -423,12 +471,12 @@ export default {
 
       this.nextID++;
     },
-    removeItem: function(pakket, id) {
-      pakket.gekregen = pakket.gekregen.filter(function(value) {
+    removeItem: function (pakket, id) {
+      pakket.gekregen = pakket.gekregen.filter(function (value) {
         return value.id != id;
       });
     },
-    addPakketRow: function() {
+    addPakketRow: function () {
       this.pakketten = [
         {
           datum: new Date(),
@@ -440,7 +488,7 @@ export default {
 
       this.nextRowID++;
     },
-    addGoederenRow: function() {
+    addGoederenRow: function () {
       this.goederen = [
         {
           datum: new Date(),
@@ -452,8 +500,8 @@ export default {
 
       this.nextRowID++;
     },
-    getPakketOptions: function(pakket) {
-      return this.pakketOptions.filter(function(value) {
+    getPakketOptions: function (pakket) {
+      return this.pakketOptions.filter(function (value) {
         for (let hadItem of pakket.gekregen) {
           if (hadItem.naam == value) {
             return false;
@@ -463,8 +511,8 @@ export default {
         return true;
       });
     },
-    getGoederenOptions: function(pakket) {
-      return this.goederenOptions.filter(function(value) {
+    getGoederenOptions: function (pakket) {
+      return this.goederenOptions.filter(function (value) {
         for (let hadItem of pakket.gekregen) {
           if (hadItem.naam == value) {
             return false;
@@ -474,20 +522,20 @@ export default {
         return true;
       });
     },
-    removePakket: function(pakket) {
-      this.pakketten = this.pakketten.filter(function(value) {
+    removePakket: function (pakket) {
+      this.pakketten = this.pakketten.filter(function (value) {
         return value.id != pakket.id;
       });
     },
-    removeGoederen: function(pakket) {
-      this.goederen = this.goederen.filter(function(value) {
+    removeGoederen: function (pakket) {
+      this.goederen = this.goederen.filter(function (value) {
         return value.id != pakket.id;
       });
     },
-    showAll: function() {
+    showAll: function () {
       this.showPakketAmount = this.pakketten.length
     },
-    save: function() {
+    save: function () {
       let vm = this;
       this.saving = true;
 
@@ -498,10 +546,10 @@ export default {
         for (let item of pakket.gekregen) {
           if (item.naam == "") {
             vm.$Simplert.open({
-                title: "Veld niet ingevuld!",
-                message: "Een van de items heeft gen pakket type geselecteerd!",
-                type: "error",
-                customCloseBtnText: "Sluiten"
+              title: "Veld niet ingevuld!",
+              message: "Een van de items heeft gen pakket type geselecteerd!",
+              type: "error",
+              customCloseBtnText: "Sluiten"
             });
             this.saving = false;
             return
@@ -524,10 +572,10 @@ export default {
         for (let item of pakket.gekregen) {
           if (item.naam == "") {
             vm.$Simplert.open({
-                title: "Veld niet ingevuld!",
-                message: "Een van de items heeft gen pakket type geselecteerd!",
-                type: "error",
-                customCloseBtnText: "Sluiten"
+              title: "Veld niet ingevuld!",
+              message: "Een van de items heeft gen pakket type geselecteerd!",
+              type: "error",
+              customCloseBtnText: "Sluiten"
             });
             this.saving = false;
             return
@@ -552,7 +600,7 @@ export default {
           Goederen: zohoGoederen,
           Opmerking: vm.opmerking,
         }
-      }).then(function() {
+      }).then(function () {
         vm.saving = false;
         vm.$Simplert.open({
           title: "Opgeslagen!",
@@ -568,21 +616,21 @@ export default {
     }
   },
 
-  created: function() {
+  created: function () {
     let vm = this;
 
     vm.recordID = vm.$route.params.id;
     window.ZOHO.CRM.API.getRecord({
       Entity: "Zeephuisje",
       RecordID: vm.recordID
-    }).then(function(response) {
+    }).then(function (response) {
       console.log(response);
 
       vm.info.name = `${response.data[0].Voornaam} ${response.data[0].Naam}`;
       vm.info.huishouden = response.data[0].Huishouden;
       vm.info.doelgroepnummer = response.data[0].Doelgroep_Nummer;
       vm.info.code = response.data[0].Code;
-      vm.info.opmerking = response.data[0].Opmerking ? response.data[0].Opmerking  : "";
+      vm.info.opmerking = response.data[0].Opmerking ? response.data[0].Opmerking : "";
 
       let maxID = 1;
       let rowID = 1;
@@ -604,8 +652,8 @@ export default {
         });
 
         pakketVoorDatum[pakket.Datum].opmerking += pakket.Opemerking
-          ? pakket.Opemerking
-          : "";
+            ? pakket.Opemerking
+            : "";
 
         if (pakket.id1 > maxID) {
           maxID = pakket.id1;
@@ -644,8 +692,8 @@ export default {
         }
 
         goederenVoorDatum[pakket.Datumm].opmerking += pakket.Opmerking
-          ? pakket.Opmerking
-          : "";
+            ? pakket.Opmerking
+            : "";
 
         if (pakket.id1 > maxID) {
           maxID = pakket.id1;
@@ -673,7 +721,7 @@ export default {
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style>
-  ul {
-    padding-left: 20px;
-  }
+ul {
+  padding-left: 20px;
+}
 </style>
