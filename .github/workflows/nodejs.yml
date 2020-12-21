@@ -10,27 +10,27 @@ jobs:
         with:
           token: ${{ secrets.ACCESS_TOKEN }}
           submodules: true
-    - name: Use Node.js 12.x
-      uses: actions/setup-node@v1
-      with:
-        node-version: 12.x
-    - name: Install zoho utils
-      run: |
-        npm install -g zoho-extension-toolkit
-    - name: Install vue utils
-      run: |
-        npm install -g @vue/cli
-    - name: npm build
-      run: |
-        cd zeephuisje
-        npm install
-        cd zeephuisje
-        npm install
-        cd ..
-        npm run build
-      env:
-        CI: true
-    - uses: actions/upload-artifact@v1
-      with:
-        name: zeephuisje.zip
-        path: zeephuisje/dist
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install zoho utils
+        run: |
+          npm install -g zoho-extension-toolkit
+      - name: Install vue utils
+        run: |
+          npm install -g @vue/cli
+      - name: npm build
+        run: |
+          cd zeephuisje
+          npm install
+          cd zeephuisje
+          npm install
+          cd ..
+          npm run build
+        env:
+          CI: true
+      - uses: actions/upload-artifact@v1
+        with:
+          name: zeephuisje.zip
+          path: zeephuisje/dist
