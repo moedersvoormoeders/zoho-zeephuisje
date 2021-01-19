@@ -428,7 +428,7 @@ export default {
     pakketVandaag: function () {
       const today = new Date();
       for (let pakket of this.pakketten) {
-        if (pakket.datum.getMonth() === today.getMonth()) {
+        if (pakket.datum.getMonth() === today.getMonth() && pakket.datum.getFullYear() === today.getFullYear()) {
           for (let item of pakket.gekregen) {
             if (item.naam === "Pakket") {
               this.$Simplert.open({
