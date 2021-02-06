@@ -69,6 +69,8 @@
 </template>
 
 <script>
+import { keyboardHelper } from "@/helpers/keyboard.helper";
+
 export default {
   template: "#search",
   components: {},
@@ -86,10 +88,11 @@ export default {
     search: function() {
       let vm = this;
       this.searching = true;
+      let seachTerm = keyboardHelper.superCrazyAzertyBarcodeFix(this.doelgroepnummer)
       window.ZOHO.CRM.API.searchRecord({
         Entity: "Zeephuisje",
         Type: "word",
-        Query: `${this.prefix}${this.doelgroepnummer}`
+        Query: `${this.prefix}${seachTerm}`
       }).then(function(res) {
         vm.searching = false;
 
