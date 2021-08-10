@@ -40,6 +40,12 @@
         </div>
       </div>
       <h3>Info</h3>
+      <div class="row mb-3" v-if="info.classificatie == 'Niet-actief'">
+        <div class="col-4 mb-3">
+          <h5>Classificatie</h5>
+          <span style="color: red">{{ info.classificatie }}</span>
+        </div>
+      </div>
       <div class="row mb-3">
         <div class="col-4 mb-3">
           <h5>Naam</h5>
@@ -631,6 +637,7 @@ export default {
       vm.info.doelgroepnummer = response.data[0].Doelgroep_Nummer;
       vm.info.code = response.data[0].Code;
       vm.info.opmerking = response.data[0].Opmerking ? response.data[0].Opmerking : "";
+      vm.info.classificatie = response.data[0].classificatie;
 
       let maxID = 1;
       let rowID = 1;
